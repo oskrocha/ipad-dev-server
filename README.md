@@ -1,15 +1,21 @@
 ```
-  _____           _   _____            
- |_   _|_ __   __| | |  __ \           
-   | | | '_ \ / _` | | |  | | _____   __
-   | | | |_) | (_| | | |__| |/ _ \ \ / /
-  _|_|_| .__/ \__,_| |_____/\___/\_/\_/ 
- / ____| |                              
-| (___ |_|__ _ ____   _____ _ __       
- \___ \/ _ \ '__\ \ / / _ \ '__|      
- ____) |  __/ |   \ V /  __/ |         
-|_____/ \___|_|    \_/ \___|_|         
-                                        
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   ██╗██████╗  █████╗ ██████╗     ██████╗ ███████╗██╗   ██╗  ║
+║   ██║██╔══██╗██╔══██╗██╔══██╗    ██╔══██╗██╔════╝██║   ██║  ║
+║   ██║██████╔╝███████║██║  ██║    ██║  ██║█████╗  ██║   ██║  ║
+║   ██║██╔═══╝ ██╔══██║██║  ██║    ██║  ██║██╔══╝  ╚██╗ ██╔╝  ║
+║   ██║██║     ██║  ██║██████╔╝    ██████╔╝███████╗ ╚████╔╝   ║
+║   ╚═╝╚═╝     ╚═╝  ╚═╝╚═════╝     ╚═════╝ ╚══════╝  ╚═══╝    ║
+║                                                               ║
+║             ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗ ║
+║             ██╔════╝██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗║
+║             ███████╗█████╗  ██████╔╝██║   ██║█████╗  ██████╔╝║
+║             ╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██╔══╝  ██╔══██╗║
+║             ███████║███████╗██║  ██║ ╚████╔╝ ███████╗██║  ██║║
+║             ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
 ```
 
 # iPad Dev Server
@@ -23,9 +29,18 @@
 
 ---
 
-## 💡 Why This Project?
+## 💡 The Frustration That Led Here
 
-**Code from your iPad like a pro.** This script turns any cheap VPS ($5-10/month) into your personal cloud development machine. Access VS Code, Docker, Git, and full terminal from Safari on your iPad - no jailbreak, no workarounds, just pure development power.
+As an iPad Pro user, you've probably hit these walls:
+
+- **No JIT compilation** → Can't run VMs like UTM for local dev environments
+- **iPadOS 18 limitations** → No native terminal, no Docker, no proper IDEs
+- **Locked ecosystem** → Can't install the tools that make development productive  
+- **Safari-only reality** → Limited by Apple's walled garden
+
+You have this **incredible hardware** (M4 chip, 120Hz display, all-day battery) but you're stuck using it as a glorified content consumption device.
+
+**This project fixes that.** Turn any $5/month VPS into your personal cloud development machine with full VS Code, Docker, Git, and terminal - all accessible from Safari. No jailbreak, no workarounds, just real development power.
 
 ### Perfect For:
 - 📱 **iPad Pro users** who want desktop-class development
@@ -217,13 +232,43 @@ If you prefer step-by-step control:
 - **Split Screen**: Code + docs side-by-side
 - **Picture-in-Picture**: Watch tutorials while coding
 
-### Workflow Example
+### Real Development Workflows
 
+**Python with uv (10-100x faster than pip)**
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv init my-fastapi-app && cd my-fastapi-app
+uv add fastapi uvicorn httpx
+uv run uvicorn main:app --reload --host 0.0.0.0
 ```
-Morning:     Open Safari → code-server → Continue yesterday's work
-Commuting:   Blink Shell → Check server status, run tests
-Afternoon:   Safari fullscreen → Deep coding session
-Evening:     Split view → Code + Stack Overflow
+
+**Node.js Full-Stack**
+```bash
+npm create vite@latest my-app -- --template react-ts
+cd my-app && npm install && npm run dev
+# Access at https://your-vps-ip:5173
+```
+
+**Docker Multi-Service**
+```bash
+# PostgreSQL + Redis + Your App
+docker compose up -d
+# Monitor logs in code-server terminal
+# Connect from TablePlus on iPad
+```
+
+**Go Microservices**
+```bash
+go mod init github.com/you/project
+go install github.com/cosmtrek/air@latest
+air  # Hot reload!
+```
+
+**Rust Systems Programming**
+```bash
+cargo new my-app && cd my-app
+cargo run
+# Full rust-analyzer support in code-server
 ```
 
 ---
