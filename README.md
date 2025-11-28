@@ -234,41 +234,91 @@ If you prefer step-by-step control:
 
 ### Real Development Workflows
 
-**Python with uv (10-100x faster than pip)**
+**Python Development in Code-Server**
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-uv init my-fastapi-app && cd my-fastapi-app
-uv add fastapi uvicorn httpx
-uv run uvicorn main:app --reload --host 0.0.0.0
+# Open VS Code in browser at https://your-vps-ip
+# Create a new Python project
+mkdir my-project && cd my-project
+python3 -m venv .venv
+source .venv/bin/activate
+pip install fastapi uvicorn pytest
+
+# Write your code in code-server's VS Code
+# Install Python extension in code-server
+# Run and test directly in the integrated terminal
+python main.py
+
+# Debug with breakpoints, use IntelliSense, format with black
+# All VS Code features work perfectly in the browser
 ```
 
-**Node.js Full-Stack**
+**Any Language Development in Neovim + LazyVim**
 ```bash
-npm create vite@latest my-app -- --template react-ts
-cd my-app && npm install && npm run dev
-# Access at https://your-vps-ip:5173
+# LazyVim comes with LSP, TreeSitter, auto-completion
+nvim myfile.rs      # Rust with rust-analyzer
+nvim server.go      # Go with gopls
+nvim app.ts         # TypeScript with tsserver
+nvim main.py        # Python with pyright
+
+# LazyVim features:
+# - <leader>ff → Telescope find files
+# - <leader>sg → Live grep search
+# - <leader>ca → Code actions
+# - gd → Go to definition
+# - K → Hover documentation
+# Full IDE experience in the terminal!
 ```
 
-**Docker Multi-Service**
+**Docker & Docker Compose Workflows**
 ```bash
-# PostgreSQL + Redis + Your App
+# Run databases and services
+docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=dev postgres
+docker run -d -p 6379:6379 redis
+
+# Multi-service with compose
+cat > docker-compose.yml << EOF
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: dev
+  redis:
+    image: redis:alpine
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+EOF
+
 docker compose up -d
-# Monitor logs in code-server terminal
-# Connect from TablePlus on iPad
+docker compose logs -f
+docker compose exec app bash
 ```
 
-**Go Microservices**
+**Git Workflows with LazyGit**
 ```bash
-go mod init github.com/you/project
-go install github.com/cosmtrek/air@latest
-air  # Hot reload!
-```
+# Launch LazyGit TUI (beautiful terminal UI)
+lazygit
 
-**Rust Systems Programming**
-```bash
-cargo new my-app && cd my-app
-cargo run
-# Full rust-analyzer support in code-server
+# In LazyGit:
+# - Navigate files with arrows
+# - Stage with space
+# - Commit with 'c'
+# - Push with 'P'
+# - View diffs, branches, logs visually
+# - Resolve merge conflicts interactively
+
+# Or use git with delta (beautiful diffs)
+git status
+git add .
+git commit -m "feat: new feature"
+git push
+
+# Git aliases work too
+git log --oneline --graph --all
 ```
 
 ---
