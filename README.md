@@ -232,50 +232,57 @@ If you prefer step-by-step control:
 - **Split Screen**: Code + docs side-by-side
 - **Picture-in-Picture**: Watch tutorials while coding
 
-### Real Development Workflows
+### Real Development Workflows on iPad
 
-**Python Development in Code-Server**
+**Python Development in Code-Server (Safari)**
 ```bash
-# Open VS Code in browser at https://your-vps-ip
-# Create a new Python project
+# Open Safari on iPad → https://your-vps-ip
+# Full VS Code interface with iPad keyboard shortcuts
+# Create a new Python project in the browser terminal
+
 mkdir my-project && cd my-project
 python3 -m venv .venv
 source .venv/bin/activate
 pip install fastapi uvicorn pytest
 
-# Write your code in code-server's VS Code
-# Install Python extension in code-server
-# Run and test directly in the integrated terminal
-python main.py
-
-# Debug with breakpoints, use IntelliSense, format with black
-# All VS Code features work perfectly in the browser
+# Write code with IntelliSense, auto-completion
+# Set breakpoints and debug with iPad trackpad
+# Run tests in integrated terminal
+# All VS Code extensions work: Python, Pylance, Black formatter
+# Use Cmd+P to open files, Cmd+Shift+P for command palette
 ```
 
-**Any Language Development in Neovim + LazyVim**
+**Terminal Development with Neovim (Blink Shell on iPad)**
 ```bash
-# LazyVim comes with LSP, TreeSitter, auto-completion
-nvim myfile.rs      # Rust with rust-analyzer
-nvim server.go      # Go with gopls
-nvim app.ts         # TypeScript with tsserver
-nvim main.py        # Python with pyright
+# SSH from Blink Shell or Termius on iPad
+# Full terminal IDE with LazyVim
 
-# LazyVim features:
-# - <leader>ff → Telescope find files
-# - <leader>sg → Live grep search
-# - <leader>ca → Code actions
-# - gd → Go to definition
-# - K → Hover documentation
-# Full IDE experience in the terminal!
+nvim myfile.rs      # Rust: Full rust-analyzer LSP
+nvim server.go      # Go: gopls with auto-imports
+nvim app.ts         # TypeScript: Complete type checking
+nvim api.py         # Python: pyright LSP
+
+# iPad workflow:
+# - Use iPad's hardware keyboard for Vim motions
+# - <leader>ff (Space-f-f) → Telescope fuzzy find files
+# - <leader>sg (Space-s-g) → Live grep codebase
+# - gd → Jump to definition across files
+# - K → View documentation
+# - Split windows, visual mode, macros all work perfectly
 ```
 
-**Docker & Docker Compose Workflows**
+**Docker Development from iPad**
 ```bash
-# Run databases and services
+# SSH into your VPS from iPad
+# Run full backend infrastructure
+
+# Start PostgreSQL for your app
 docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=dev postgres
-docker run -d -p 6379:6379 redis
 
-# Multi-service with compose
+# Connect from iPad using TablePlus or any SQL client
+# Your VPS IP:5432
+
+# Full-stack setup with compose
 cat > docker-compose.yml << EOF
 services:
   db:
@@ -288,38 +295,43 @@ services:
     build: .
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-      - redis
 EOF
 
 docker compose up -d
-docker compose logs -f
-docker compose exec app bash
+# Monitor logs from iPad terminal
+docker compose logs -f app
 ```
 
-**Git Workflows with LazyGit**
+**Git Workflow from iPad (LazyGit TUI)**
 ```bash
-# Launch LazyGit TUI (beautiful terminal UI)
+# Beautiful Git interface in Blink Shell/Termius
 lazygit
 
-# In LazyGit:
-# - Navigate files with arrows
-# - Stage with space
-# - Commit with 'c'
-# - Push with 'P'
-# - View diffs, branches, logs visually
-# - Resolve merge conflicts interactively
+# Navigate with iPad keyboard/trackpad:
+# - ↑↓ arrows to select files
+# - Space to stage/unstage
+# - 'c' to commit (opens editor)
+# - 'P' to push
+# - Tab to switch panels (Files/Branches/Commits)
+# - Visual diff viewer with syntax highlighting
+# - Interactive rebase, cherry-pick, stash management
 
-# Or use git with delta (beautiful diffs)
+# Traditional git also enhanced with delta:
 git status
-git add .
-git commit -m "feat: new feature"
-git push
-
-# Git aliases work too
-git log --oneline --graph --all
+git diff  # Beautiful side-by-side diffs
+git log --oneline --graph  # Pretty branch visualization
 ```
+
+**iPad Pro Split View Power Combo**
+- **Left**: Safari with code-server (VS Code)
+- **Right**: Blink Shell with LazyGit or terminal commands
+- **Result**: Code on left, git operations on right - seamless workflow
+
+**Stage Manager Setup (iPad Pro)**
+- **Main window**: Code-server fullscreen
+- **Overlay 1**: Blink Shell for git/docker commands  
+- **Overlay 2**: Safari with documentation
+- **Overlay 3**: Working Copy app for quick commits
 
 ---
 
