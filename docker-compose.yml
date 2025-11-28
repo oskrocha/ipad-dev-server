@@ -1,0 +1,54 @@
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Etc/UTC}
+      - PASSWORD=${CODESERVER_PASSWORD}
+      - SUDO_PASSWORD=${CODESERVER_PASSWORD}
+      - DEFAULT_WORKSPACE=/config/workspace
+    volumes:
+      - ./config:/config:Z
+      - ./projects:/config/workspace:Z
+      # Optional: mount your host docker socket to use docker inside code-server
+      - /var/run/docker.sock:/var/run/docker.sock
+      # SSL certificates
+      - /etc/ssl/code-server:/etc/ssl/code-server:ro,Z
+    ports:
+      - "8443:8443"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  # Optional: Nginx reverse proxy for additional security and proper HTTPS handling
+  nginx:
+    image: nginx:alpine
+    container_name: code-server-nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro,Z
+      - /etc/ssl/code-server:/etc/ssl/code-server:ro,Z
+    depends_on:
+      - code-server
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - default
+
+  # Optional: Watchtower for automatic updates
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=86400  # Check daily
+      - WATCHTOWER_LABEL_ENABLE=true
+    restart: unless-stopped
