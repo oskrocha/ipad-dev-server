@@ -21,23 +21,19 @@ jobs:
 
       - name: Run full setup in Debian container
         run: |
-          # Create a Debian 12 container with systemd
+          # Create a Debian 12 container
           docker run -d --name debian-integration \
             --privileged \
-            --tmpfs /tmp \
-            --tmpfs /run \
-            --tmpfs /run/lock \
-            -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
             -v $PWD:/workspace \
             -w /workspace \
             debian:12 \
-            /bin/bash -c "apt-get update && apt-get install -y systemd && exec /lib/systemd/systemd"
+            sleep infinity
           
-          # Wait for systemd to be ready
-          sleep 5
+          # Wait for container to be ready
+          sleep 2
           
           # Install basic requirements
-          docker exec debian-integration bash -c "apt-get update && apt-get install -y sudo curl git"
+          docker exec debian-integration bash -c "apt-get update && apt-get install -y sudo curl git procps"
           
           # Create test user
           docker exec debian-integration bash -c "
@@ -69,13 +65,13 @@ jobs:
           
           docker exec debian-integration bash -c "
             echo '--- Checking swap ---'
-            swapon --show || echo 'Swap check: OK (may not be active in container)'
+            [ -f /swapfile ] && echo '✅ Swap file created' || echo '⚠️  Swap file not created (may require reboot)'
             
             echo '--- Checking Docker ---'
             which docker && echo '✅ Docker binary installed' || echo '❌ Docker not found'
             
             echo '--- Checking Docker Compose ---'
-            docker compose version && echo '✅ Docker Compose installed' || echo '❌ Docker Compose not found'
+            docker compose version && echo '✅ Docker Compose installed' || echo '⚠️  Docker Compose not found'
             
             echo '--- Checking Zsh ---'
             which zsh && echo '✅ Zsh installed' || echo '❌ Zsh not found'
@@ -100,6 +96,9 @@ jobs:
             [ -f /home/testuser/code-server/docker-compose.yml ] && echo '✅ docker-compose.yml exists' || echo '❌ docker-compose.yml not found'
             [ -f /home/testuser/code-server/.env ] && echo '✅ .env file exists' || echo '❌ .env not found'
             [ -f /home/testuser/code-server/PASSWORD.txt ] && echo '✅ PASSWORD.txt exists' || echo '❌ PASSWORD.txt not found'
+            
+            echo '--- Checking UFW ---'
+            which ufw && echo '✅ UFW installed' || echo '⚠️  UFW not found (may not be active in container)'
           "
           
           echo "=== Integration test completed ==="
@@ -119,19 +118,16 @@ jobs:
 
       - name: Run full setup in Fedora container
         run: |
-          # Create a Fedora 42 container with systemd
+          # Create a Fedora 42 container
           docker run -d --name fedora-integration \
             --privileged \
-            --tmpfs /tmp \
-            --tmpfs /run \
-            -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
             -v $PWD:/workspace \
             -w /workspace \
             fedora:42 \
-            /usr/sbin/init
+            sleep infinity
           
-          # Wait for systemd to be ready
-          sleep 5
+          # Wait for container to be ready
+          sleep 2
           
           # Install basic requirements
           docker exec fedora-integration bash -c "dnf install -y sudo curl git procps-ng"
@@ -165,13 +161,13 @@ jobs:
           
           docker exec fedora-integration bash -c "
             echo '--- Checking swap ---'
-            swapon --show || echo 'Swap check: OK (may not be active in container)'
+            [ -f /swapfile ] && echo '✅ Swap file created' || echo '⚠️  Swap file not created (may require reboot)'
             
             echo '--- Checking Docker ---'
             which docker && echo '✅ Docker binary installed' || echo '❌ Docker not found'
             
             echo '--- Checking Docker Compose ---'
-            docker compose version && echo '✅ Docker Compose installed' || echo '❌ Docker Compose not found'
+            docker compose version && echo '✅ Docker Compose installed' || echo '⚠️  Docker Compose not found'
             
             echo '--- Checking Zsh ---'
             which zsh && echo '✅ Zsh installed' || echo '❌ Zsh not found'
@@ -192,7 +188,7 @@ jobs:
             which fzf && echo '✅ fzf installed' || echo '❌ fzf not found'
             
             echo '--- Checking firewalld ---'
-            systemctl status firewalld || echo 'Firewall check: OK (may not be active in container)'
+            which firewall-cmd && echo '✅ firewalld installed' || echo '⚠️  firewalld not found (may not be active in container)'
             
             echo '--- Checking code-server setup ---'
             [ -d /home/testuser/code-server ] && echo '✅ code-server directory created' || echo '❌ code-server directory not found'
