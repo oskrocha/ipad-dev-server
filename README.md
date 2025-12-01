@@ -45,6 +45,7 @@ You have this **incredible hardware** (M4 chip, 120Hz display, all-day battery) 
 **This project fixes that.** Turn any $5/month VPS into your personal cloud development machine with full VS Code, Docker, Git, and terminal - all accessible from Safari. No jailbreak, no workarounds, just real development power.
 
 ### Perfect For:
+
 - 📱 **iPad Pro users** who want desktop-class development
 - ✈️ **Digital nomads** coding from tablets
 - 🎒 **Students** with limited hardware
@@ -58,12 +59,14 @@ You have this **incredible hardware** (M4 chip, 120Hz display, all-day battery) 
 One script installs everything you need:
 
 ### 🎨 **Beautiful Terminal Experience**
+
 - **Code-Server** - Full VS Code in your browser (HTTPS secured)
 - **Zsh + Oh My Zsh** - Modern shell with auto-suggestions
 - **Powerlevel10k** - Beautiful prompt with Nerd Fonts
 - **tmux** - Multiple terminal sessions
 
 ### 🛠️ **Complete Dev Stack**
+
 - **Docker & Docker Compose** - Containerize everything
 - **Python 3** + pip + venv
 - **Node.js (LTS)** + npm
@@ -72,6 +75,7 @@ One script installs everything you need:
 - **Git** with delta (beautiful diffs)
 
 ### 🚀 **Modern CLI Tools**
+
 - **LazyGit** - Terminal UI for Git
 - **Neovim + LazyVim** - Modern Vim setup
 - **eza/exa** - Better ls with icons
@@ -81,6 +85,7 @@ One script installs everything you need:
 - **jq** - JSON processor
 
 ### 🔐 **Security Built-In**
+
 - Automatic firewall configuration
 - HTTPS with SSL certificates
 - Password-protected access
@@ -96,6 +101,7 @@ One script installs everything you need:
 ## 📋 What This Script Installs
 
 ### Core Components
+
 - **Code-server** (VS Code in browser) via Docker with HTTPS
 - **Virtual Memory** (4GB swap file)
 - **Zsh** with Oh My Zsh and Powerlevel10k theme
@@ -103,6 +109,7 @@ One script installs everything you need:
 - **Neovim** with LazyVim configuration
 
 ### Additional Tools
+
 - **Docker & Docker Compose** - Container management
 - **bat** - Better `cat` with syntax highlighting
 - **exa** - Better `ls` with colors
@@ -114,6 +121,7 @@ One script installs everything you need:
 - **Zsh plugins** - autosuggestions and syntax highlighting
 
 ### Security Features
+
 - **UFW Firewall** configured
 - **HTTPS** with self-signed SSL certificates
 - **Nginx reverse proxy** with rate limiting
@@ -140,6 +148,7 @@ chmod +x deploy.sh setup.sh verify.sh
 ```
 
 **What if I don't have Git?**
+
 - Download the [ZIP file](https://github.com/oskrocha/ipad-dev-server/archive/refs/heads/main.zip)
 - Extract it on your computer
 - Open Terminal and `cd` to the extracted folder
@@ -157,6 +166,7 @@ chmod +x deploy.sh setup.sh verify.sh
 ```
 
 The script will:
+
 1. ✅ Ask for your VPS IP and username
 2. ✅ Upload all files automatically
 3. ✅ Run the complete installation
@@ -166,10 +176,6 @@ The script will:
 ⏱️ **Total time: 10-15 minutes**
 
 ---
-
-### Option 2: Manual Installation
-
-If you prefer step-by-step control:
 
 ### Option 2: Manual Installation
 
