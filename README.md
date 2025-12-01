@@ -24,8 +24,16 @@
 > ⚡ **Opinionated Setup** - This script makes specific choices (Zsh, Oh My Zsh, Powerlevel10k, LazyVim, LazyGit) optimized for modern terminal workflows. If you prefer different tools, you can customize the setup.sh script.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Release](https://img.shields.io/github/v/release/oskrocha/ipad-dev-server?include_prereleases)](https://github.com/oskrocha/ipad-dev-server/releases)
+[![CI Tests](https://github.com/oskrocha/ipad-dev-server/actions/workflows/test.yml/badge.svg)](https://github.com/oskrocha/ipad-dev-server/actions/workflows/test.yml)
+[![Integration Tests](https://github.com/oskrocha/ipad-dev-server/actions/workflows/integration-test.yml/badge.svg)](https://github.com/oskrocha/ipad-dev-server/actions/workflows/integration-test.yml)
+
 [![Fedora 42](https://img.shields.io/badge/Fedora-42-blue.svg)](https://getfedora.org/)
 [![Debian](https://img.shields.io/badge/Debian-12%2F13-red.svg)](https://www.debian.org/)
+[![Shell Script](https://img.shields.io/badge/Shell_Script-121011?logo=gnu-bash&logoColor=white)](https://www.gnu.org/software/bash/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+
+> 📊 **Code Coverage**: View test coverage results in [GitHub Actions](https://github.com/oskrocha/ipad-dev-server/actions/workflows/integration-test.yml) → Select latest run → "Coverage Summary" job → View summary (currently ~62% on Debian 12)
 
 ---
 
