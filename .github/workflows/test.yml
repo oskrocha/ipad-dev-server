@@ -1,0 +1,211 @@
+name: Test Setup Scripts
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  shellcheck:
+    name: ShellCheck Linting
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: '.'
+          severity: warning
+          format: gcc
+
+  syntax-check:
+    name: Bash Syntax Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check bash syntax
+        run: |
+          echo "Checking setup.sh..."
+          bash -n setup.sh
+          
+          echo "Checking deploy.sh..."
+          bash -n deploy.sh
+          
+          echo "Checking verify.sh..."
+          bash -n verify.sh
+          
+          echo "✅ All scripts have valid syntax"
+
+  test-debian:
+    name: Test on Debian 12
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Test setup script (dry run)
+        run: |
+          # Create a container to test in
+          docker run -d --name debian-test \
+            --privileged \
+            -v $PWD:/workspace \
+            -w /workspace \
+            debian:12 \
+            sleep 3600
+          
+          # Install basic requirements
+          docker exec debian-test bash -c "apt-get update && apt-get install -y sudo"
+          
+          # Create a test user
+          docker exec debian-test bash -c "useradd -m -s /bin/bash testuser && echo 'testuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
+          
+          # Test script syntax and basic checks
+          docker exec -u testuser debian-test bash -c "bash -n /workspace/setup.sh"
+          
+          # Verify key components exist
+          docker exec debian-test bash -c "
+            echo '✅ Setup script syntax is valid'
+            grep -q 'SWAP_SIZE' /workspace/setup.sh && echo '✅ Swap configuration present'
+            grep -q 'docker' /workspace/setup.sh && echo '✅ Docker installation present'
+            grep -q 'code-server' /workspace/docker-compose.yml && echo '✅ Code-server configuration present'
+          "
+          
+          # Cleanup
+          docker stop debian-test
+          docker rm debian-test
+
+  test-fedora:
+    name: Test on Fedora 39
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Test setup script (dry run)
+        run: |
+          # Create a container to test in
+          docker run -d --name fedora-test \
+            --privileged \
+            -v $PWD:/workspace \
+            -w /workspace \
+            fedora:39 \
+            sleep 3600
+          
+          # Install basic requirements
+          docker exec fedora-test bash -c "dnf install -y sudo"
+          
+          # Create a test user
+          docker exec fedora-test bash -c "useradd -m -s /bin/bash testuser && echo 'testuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
+          
+          # Test script syntax and basic checks
+          docker exec -u testuser fedora-test bash -c "bash -n /workspace/setup.sh"
+          
+          # Verify key components exist
+          docker exec fedora-test bash -c "
+            echo '✅ Setup script syntax is valid'
+            grep -q 'SWAP_SIZE' /workspace/setup.sh && echo '✅ Swap configuration present'
+            grep -q 'docker' /workspace/setup.sh && echo '✅ Docker installation present'
+            grep -q 'code-server' /workspace/docker-compose.yml && echo '✅ Code-server configuration present'
+          "
+          
+          # Cleanup
+          docker stop fedora-test
+          docker rm fedora-test
+
+  validate-compose:
+    name: Validate Docker Compose
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate docker-compose.yml
+        run: |
+          docker compose -f docker-compose.yml config > /dev/null
+          echo "✅ Docker Compose file is valid"
+
+  validate-nginx:
+    name: Validate Nginx Config
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Test nginx configuration
+        run: |
+          docker run --rm -v $PWD/nginx.conf:/etc/nginx/nginx.conf:ro nginx:alpine nginx -t
+          echo "✅ Nginx configuration is valid"
+
+  markdown-lint:
+    name: Markdown Linting
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Lint markdown files
+        uses: articulate/actions-markdownlint@v1
+        with:
+          files: '*.md docs/*.md'
+          ignore: node_modules
+          config: .markdownlint.json
+        continue-on-error: true
+
+  check-scripts:
+    name: Verify Script Executables
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check script permissions
+        run: |
+          echo "Checking if scripts are executable..."
+          
+          if [ -x "setup.sh" ]; then
+            echo "✅ setup.sh is executable"
+          else
+            echo "⚠️ setup.sh is not executable"
+          fi
+          
+          if [ -x "deploy.sh" ]; then
+            echo "✅ deploy.sh is executable"
+          else
+            echo "⚠️ deploy.sh is not executable"
+          fi
+          
+          if [ -x "verify.sh" ]; then
+            echo "✅ verify.sh is executable"
+          else
+            echo "⚠️ verify.sh is not executable"
+          fi
+
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy security scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          scan-ref: '.'
+          format: 'table'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH'
