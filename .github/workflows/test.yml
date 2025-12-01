@@ -83,7 +83,7 @@ jobs:
           docker rm debian-test
 
   test-fedora:
-    name: Test on Fedora 39
+    name: Test on Fedora 42
     runs-on: ubuntu-latest
     
     steps:
@@ -97,7 +97,7 @@ jobs:
             --privileged \
             -v $PWD:/workspace \
             -w /workspace \
-            fedora:39 \
+            fedora:42 \
             sleep 3600
           
           # Install basic requirements
