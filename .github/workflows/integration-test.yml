@@ -32,22 +32,8 @@ jobs:
           # Wait for container to be ready
           sleep 2
           
-          # Install basic requirements including kcov for coverage
-          docker exec debian-integration bash -c "
-            apt-get update && apt-get install -y sudo curl git procps wget cmake g++ pkg-config libcurl4-openssl-dev libdw-dev libiberty-dev binutils-dev zlib1g-dev
-            
-            # Install kcov for bash coverage
-            cd /tmp
-            wget https://github.com/SimonKagstrom/kcov/archive/master.tar.gz
-            tar xzf master.tar.gz
-            cd kcov-master
-            mkdir build
-            cd build
-            cmake ..
-            make
-            make install
-            cd /workspace
-          "
+          # Install basic requirements
+          docker exec debian-integration bash -c "apt-get update && apt-get install -y sudo curl git procps bc"
           
           # Create test user
           docker exec debian-integration bash -c "
@@ -68,26 +54,24 @@ jobs:
             sed 's/p10k configure/echo \"Skipping p10k configure in CI\"/g' setup.sh > setup-test.sh
             chmod +x setup-test.sh
             
-            echo '=== Starting setup script with coverage ==='
-            mkdir -p /tmp/coverage
-            kcov --exclude-pattern=/usr /tmp/coverage ./setup-test.sh 2>&1 | tee setup.log || echo 'Setup completed with warnings'
+            echo '=== Starting setup script with coverage tracking ==='
             
-            # Copy coverage data
-            sudo cp -r /tmp/coverage /workspace/coverage-debian
+            # Run with bash tracing to track executed lines
+            bash -x setup-test.sh 2>&1 | tee setup.log || echo 'Setup completed with warnings'
+            
+            # Calculate coverage from trace
+            TOTAL_LINES=\$(grep -c '^[^#]*[[:alnum:]]' setup-test.sh || echo 1)
+            EXECUTED_LINES=\$(grep -c '^\+' setup.log || echo 0)
+            COVERAGE=\$(echo \"scale=1; \$EXECUTED_LINES * 100 / \$TOTAL_LINES\" | bc)
+            
+            echo \"TOTAL_LINES=\$TOTAL_LINES\" > /workspace/coverage-debian.txt
+            echo \"EXECUTED_LINES=\$EXECUTED_LINES\" >> /workspace/coverage-debian.txt
+            echo \"COVERAGE=\$COVERAGE\" >> /workspace/coverage-debian.txt
+            
+            echo \"=== Coverage: \${COVERAGE}% (\${EXECUTED_LINES}/\${TOTAL_LINES} lines) ===\"
           "
           
           echo "✅ Setup script executed"
-          
-          # Generate coverage summary
-          docker exec debian-integration bash -c "
-            if [ -d /workspace/coverage-debian ]; then
-              echo '=== Code Coverage Summary ==='
-              # Extract coverage percentage from kcov output
-              if [ -f /workspace/coverage-debian/setup-test.sh/index.html ]; then
-                grep -o 'covered\">[0-9.]*%' /workspace/coverage-debian/setup-test.sh/index.html | head -1 | sed 's/covered\">//' || echo 'Coverage data available'
-              fi
-            fi
-          "
           
           # Verify critical components were installed
           echo "=== Verifying installations ==="
@@ -136,34 +120,25 @@ jobs:
           docker stop debian-integration
           docker rm debian-integration
 
-      - name: Upload Debian Coverage Report
+      - name: Upload Coverage Data
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: coverage-debian
-          path: coverage-debian/
+          path: coverage-debian.txt
           retention-days: 30
 
-      - name: Comment Coverage on PR
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const path = 'coverage-debian/setup-test.sh/index.html';
+      - name: Display Coverage
+        if: always()
+        run: |
+          if [ -f coverage-debian.txt ]; then
+            echo "📊 Debian Coverage Results:"
+            cat coverage-debian.txt
             
-            if (fs.existsSync(path)) {
-              const html = fs.readFileSync(path, 'utf8');
-              const match = html.match(/covered">([0-9.]+)%/);
-              const coverage = match ? match[1] : 'N/A';
-              
-              await github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: `## 📊 Debian Test Coverage\n\n**Code Coverage: ${coverage}%**\n\n[View Full Report](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`
-              });
-            }
+            COVERAGE=$(grep COVERAGE= coverage-debian.txt | cut -d= -f2)
+            echo "coverage_percent=$COVERAGE" >> $GITHUB_OUTPUT
+          fi
+        id: coverage
 
   integration-fedora:
     name: Full Integration Test - Fedora 42
@@ -312,23 +287,30 @@ jobs:
         continue-on-error: true
         with:
           name: coverage-debian
-          path: coverage-debian/
       
       - name: Generate Coverage Summary
         run: |
           echo "# 📊 Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
-          if [ -f coverage-debian/setup-test.sh/index.html ]; then
-            DEBIAN_COV=$(grep -o 'covered\">[0-9.]*%' coverage-debian/setup-test.sh/index.html | head -1 | sed 's/covered\">//' || echo "N/A")
+          if [ -f coverage-debian.txt ]; then
+            COVERAGE=$(grep COVERAGE= coverage-debian.txt | cut -d= -f2)
+            EXECUTED=$(grep EXECUTED_LINES= coverage-debian.txt | cut -d= -f2)
+            TOTAL=$(grep TOTAL_LINES= coverage-debian.txt | cut -d= -f2)
+            
             echo "## Debian 12" >> $GITHUB_STEP_SUMMARY
-            echo "- **Coverage:** $DEBIAN_COV" >> $GITHUB_STEP_SUMMARY
-            echo "- Lines executed during integration test" >> $GITHUB_STEP_SUMMARY
+            echo "- **Coverage:** ${COVERAGE}%" >> $GITHUB_STEP_SUMMARY
+            echo "- **Lines Executed:** $EXECUTED / $TOTAL" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             
-            # Extract line coverage stats
-            LINES=$(grep -o 'Lines:[^<]*' coverage-debian/setup-test.sh/index.html | head -1 || echo "Lines: N/A")
-            echo "- $LINES" >> $GITHUB_STEP_SUMMARY
+            # Visual indicator
+            if (( $(echo "$COVERAGE >= 70" | bc -l) )); then
+              echo "✅ Good coverage!" >> $GITHUB_STEP_SUMMARY
+            elif (( $(echo "$COVERAGE >= 50" | bc -l) )); then
+              echo "⚠️ Moderate coverage" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ Low coverage" >> $GITHUB_STEP_SUMMARY
+            fi
           else
             echo "⚠️ Coverage data not available for Debian" >> $GITHUB_STEP_SUMMARY
           fi
