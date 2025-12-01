@@ -1,4 +1,6 @@
-```
+# iPad Dev Server
+
+```plaintext
 ╔═══════════════════════════════════════════════════════════════╗
 ║                                                               ║
 ║   ██╗██████╗  █████╗ ██████╗     ██████╗ ███████╗██╗   ██╗  ║
@@ -18,11 +20,9 @@
 ╚═══════════════════════════════════════════════════════════════╝
 ```
 
-# iPad Dev Server
-
 > 🚀 Transform any VPS into a complete development environment in 10 minutes.  
 > Perfect for **iPad users** who need full VS Code, Docker, and modern dev tools anywhere.
-
+>
 > ⚡ **Opinionated Setup** - This script makes specific choices (Zsh, Oh My Zsh, Powerlevel10k, LazyVim, LazyGit) optimized for modern terminal workflows. If you prefer different tools, you can customize the setup.sh script.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -44,7 +44,7 @@ You have this **incredible hardware** (M4 chip, 120Hz display, all-day battery) 
 
 **This project fixes that.** Turn any $5/month VPS into your personal cloud development machine with full VS Code, Docker, Git, and terminal - all accessible from Safari. No jailbreak, no workarounds, just real development power.
 
-### Perfect For:
+### Perfect For
 
 - 📱 **iPad Pro users** who want desktop-class development
 - ✈️ **Digital nomads** coding from tablets
@@ -388,7 +388,7 @@ git log --oneline --graph  # Pretty branch visualization
 
 After installation, you'll have:
 
-```
+```plaintext
 ~/code-server/
 ├── .env                    # Environment variables
 ├── PASSWORD.txt           # Your code-server password (KEEP SECURE!)
@@ -402,35 +402,41 @@ After installation, you'll have:
 ### Code-Server Management
 
 **Start code-server:**
+
 ```bash
 cd ~/code-server
 docker compose up -d
 ```
 
 **Stop code-server:**
+
 ```bash
 cd ~/code-server
 docker compose down
 ```
 
 **View code-server logs:**
+
 ```bash
 cd ~/code-server
 docker compose logs -f code-server
 ```
 
 **Restart code-server:**
+
 ```bash
 cd ~/code-server
 docker compose restart
 ```
 
 **View your password:**
+
 ```bash
 cat ~/code-server/PASSWORD.txt
 ```
 
 ### Access Code-Server
+
 - **URL:** `https://YOUR_VPS_IP:443`
 - **Password:** Located in `~/code-server/PASSWORD.txt`
 - **Note:** You'll see a security warning - this is normal with self-signed certificates
@@ -438,28 +444,33 @@ cat ~/code-server/PASSWORD.txt
 ### Useful Commands
 
 **LazyGit:**
+
 ```bash
 lazygit
 ```
 
 **LazyVim/Neovim:**
+
 ```bash
 nvim
 ```
 
 **Check swap status:**
+
 ```bash
 free -h
 swapon --show
 ```
 
 **Check Docker status:**
+
 ```bash
 docker ps
 docker stats
 ```
 
 **Firewall status:**
+
 ```bash
 # On Fedora:
 sudo firewall-cmd --list-all
@@ -479,35 +490,42 @@ sudo ufw status
    - Using a domain name
    - Getting a Let's Encrypt certificate with Certbot
 
-3. **Firewall:** 
+3. **Firewall:**
+
    - **Fedora:** Uses firewalld - Only SSH and HTTPS (443) are open
    - **Debian:** Uses UFW - Only ports 22 (SSH) and 443 (HTTPS) are open
 
 4. **SELinux (Fedora):** The script automatically configures SELinux for Docker compatibility
 
-4. **Keep Docker images updated:** Watchtower is included to auto-update containers daily
+5. **Keep Docker images updated:** Watchtower is included to auto-update containers daily
 
 ## 🛠 Customization
 
 ### Change Code-Server Port
+
 Edit `docker-compose.yml`:
+
 ```yaml
 ports:
   - "YOUR_PORT:8443"
 ```
 
 ### Adjust Swap Size
+
 Edit `setup.sh` and modify:
+
 ```bash
 SWAP_SIZE="4G"  # Change to desired size
 ```
 
 ### Add More Docker Services
+
 Edit `docker-compose.yml` to add additional containers
 
 ## 🐛 Troubleshooting
 
 ### Code-server won't start
+
 ```bash
 cd ~/code-server
 docker compose logs code-server
@@ -516,6 +534,7 @@ docker compose logs code-server
 ### Can't access via browser
 
 **On Fedora:**
+
 ```bash
 # Check firewall
 sudo firewall-cmd --list-all
@@ -528,12 +547,14 @@ sudo setenforce 0
 ```
 
 **On Debian:**
+
 ```bash
 # Check firewall
 sudo ufw status
 ```
 
 **Both systems:**
+
 ```bash
 # Check Docker
 docker ps
@@ -543,17 +564,20 @@ sudo ss -tlnp | grep 443
 ```
 
 ### Forgot password
+
 ```bash
 cat ~/code-server/PASSWORD.txt
 ```
 
 ### Docker permission denied
+
 ```bash
 # Logout and login again, or run:
 newgrp docker
 ```
 
 ### Neovim plugins not loading
+
 ```bash
 nvim
 # Then type: :Lazy sync
@@ -608,4 +632,4 @@ This setup script is provided as-is for personal use.
 
 ---
 
-**Enjoy your fully-configured development VPS! 🎉**
+Enjoy your fully-configured development VPS! 🎉
