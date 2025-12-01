@@ -182,6 +182,7 @@ The script will:
 If you prefer step-by-step control:
 
 **Prerequisites:**
+
 - Fresh **Fedora 42** (recommended) or **Debian 12/13** VPS
 - Non-root user with sudo privileges
 - At least 2GB RAM (4GB+ recommended for Fedora)
@@ -191,21 +192,25 @@ If you prefer step-by-step control:
 **Installation Steps:**
 
 1. **Upload the setup files to your VPS:**
+
    ```bash
    scp setup.sh docker-compose.yml nginx.conf user@your-vps-ip:~/
    ```
 
 2. **SSH into your VPS:**
+
    ```bash
    ssh user@your-vps-ip
    ```
 
 3. **Make the setup script executable:**
+
    ```bash
    chmod +x setup.sh
    ```
 
 4. **Run the setup script:**
+
    ```bash
    ./setup.sh
    ```
@@ -213,17 +218,20 @@ If you prefer step-by-step control:
 5. **Wait for completion** (approximately 5-10 minutes depending on your server speed)
 
 6. **Logout and login again** to apply shell changes:
+
    ```bash
    exit
    ssh user@your-vps-ip
    ```
 
 7. **Configure Powerlevel10k** (first time only):
+
    ```bash
    p10k configure
    ```
 
 8. **Start code-server:**
+
    ```bash
    cd ~/code-server
    docker compose up -d
@@ -240,13 +248,15 @@ If you prefer step-by-step control:
 
 ### Best iPad Experience
 
-**Safari (Recommended)**
+#### Safari (Recommended)
+
 - Open Safari → Navigate to `https://YOUR_VPS_IP:443`
 - Add to Home Screen for app-like experience
 - Use in fullscreen mode
 - Works perfectly with iPad keyboard shortcuts
 
-**Split View Tips**
+#### Split View Tips
+
 - Safari + Safari: Documentation + Code
 - Safari + Blink Shell: VS Code + Terminal
 - Safari + Working Copy: Code + Git client
@@ -267,7 +277,8 @@ If you prefer step-by-step control:
 
 ### Real Development Workflows on iPad
 
-**Python Development in Code-Server (Safari)**
+#### Python Development in Code-Server (Safari)
+
 ```bash
 # Open Safari on iPad → https://your-vps-ip
 # Full VS Code interface with iPad keyboard shortcuts
@@ -285,7 +296,8 @@ pip install fastapi uvicorn pytest
 # Use Cmd+P to open files, Cmd+Shift+P for command palette
 ```
 
-**Terminal Development with Neovim (Blink Shell on iPad)**
+#### Terminal Development with Neovim (Blink Shell on iPad)
+
 ```bash
 # SSH from Blink Shell or Termius on iPad
 # Full terminal IDE with LazyVim
@@ -304,7 +316,8 @@ nvim api.py         # Python: pyright LSP
 # - Split windows, visual mode, macros all work perfectly
 ```
 
-**Docker Development from iPad**
+#### Docker Development from iPad
+
 ```bash
 # SSH into your VPS from iPad
 # Run full backend infrastructure
@@ -335,7 +348,8 @@ docker compose up -d
 docker compose logs -f app
 ```
 
-**Git Workflow from iPad (LazyGit TUI)**
+#### Git Workflow from iPad (LazyGit TUI)
+
 ```bash
 # Beautiful Git interface in Blink Shell/Termius
 lazygit
@@ -355,12 +369,14 @@ git diff  # Beautiful side-by-side diffs
 git log --oneline --graph  # Pretty branch visualization
 ```
 
-**iPad Pro Split View Power Combo**
+#### iPad Pro Split View Power Combo
+
 - **Left**: Safari with code-server (VS Code)
 - **Right**: Blink Shell with LazyGit or terminal commands
 - **Result**: Code on left, git operations on right - seamless workflow
 
-**Stage Manager Setup (iPad Pro)**
+#### Stage Manager Setup (iPad Pro)
+
 - **Main window**: Code-server fullscreen
 - **Overlay 1**: Blink Shell for git/docker commands  
 - **Overlay 2**: Safari with documentation
