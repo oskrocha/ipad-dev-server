@@ -310,7 +310,7 @@ FONT_DIR="$HOME/.local/share/fonts"
 mkdir -p "$FONT_DIR"
 
 if [ ! -f "$FONT_DIR/MesloLGS NF Regular.ttf" ]; then
-    cd /tmp
+    cd /tmp || exit
     curl -fLo "MesloLGS NF Regular.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
     curl -fLo "MesloLGS NF Bold.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
     curl -fLo "MesloLGS NF Italic.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
@@ -322,7 +322,7 @@ if [ ! -f "$FONT_DIR/MesloLGS NF Regular.ttf" ]; then
         fc-cache -fv "$FONT_DIR" 2>/dev/null || true
     fi
     
-    cd - > /dev/null
+    cd - > /dev/null || exit
     print_success "Nerd Fonts installed (for SSH: configure terminal to use 'MesloLGS NF')"
 else
     print_info "Nerd Fonts already installed"
@@ -412,7 +412,7 @@ print_success "Zsh plugins and aliases configured"
 # Change default shell to zsh
 if [ "$SHELL" != "$(which zsh)" ]; then
     print_info "Changing default shell to Zsh..."
-    chsh -s $(which zsh)
+    chsh -s "$(which zsh)"
     print_success "Default shell changed to Zsh (restart session to apply)"
 fi
 
@@ -478,7 +478,7 @@ else
     sudo apt install -y ripgrep fd-find
     # Create symlinks for fd on Debian (LazyVim expects 'fd' command)
     if [ ! -f /usr/local/bin/fd ]; then
-        sudo ln -s $(which fdfind) /usr/local/bin/fd 2>/dev/null || true
+        sudo ln -s "$(which fdfind)" /usr/local/bin/fd 2>/dev/null || true
     fi
 fi
 
