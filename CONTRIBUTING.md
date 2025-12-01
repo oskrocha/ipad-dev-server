@@ -22,6 +22,7 @@ Thanks for your interest in contributing! This guide will help you get started.
 
 1. **Fork the repository**
 2. **Create a feature branch**
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -32,6 +33,7 @@ Thanks for your interest in contributing! This guide will help you get started.
    - Update documentation if needed
 
 4. **Test thoroughly**
+
    ```bash
    # Test the setup script
    ./setup.sh
@@ -44,10 +46,11 @@ Thanks for your interest in contributing! This guide will help you get started.
    ```
 
 5. **Commit with clear messages**
+
    ```bash
    git commit -m "feat: add support for XYZ"
    ```
-   
+
    Use conventional commits:
    - `feat:` New feature
    - `fix:` Bug fix
@@ -57,9 +60,11 @@ Thanks for your interest in contributing! This guide will help you get started.
    - `chore:` Maintenance tasks
 
 6. **Push and create PR**
+
    ```bash
    git push origin feature/your-feature-name
    ```
+
    - Fill out the PR template
    - Link related issues
    - Wait for review
@@ -95,6 +100,7 @@ Thanks for your interest in contributing! This guide will help you get started.
 ## 📦 Release Process
 
 Maintainers will:
+
 1. Review and merge PRs
 2. Update version numbers
 3. Create release notes

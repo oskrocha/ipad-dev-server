@@ -29,12 +29,14 @@ sudo whoami  # Should output: root
 ### 2. Update System
 
 **Fedora:**
+
 ```bash
 sudo dnf upgrade --refresh -y
 sudo reboot  # If kernel was updated
 ```
 
 **Debian:**
+
 ```bash
 sudo apt update && sudo apt upgrade -y
 sudo reboot  # If kernel was updated
@@ -67,6 +69,7 @@ sudo systemctl restart sshd
 ### 5. Upload Setup Files
 
 From your local machine:
+
 ```bash
 scp setup.sh docker-compose.yml nginx.conf user@vps-ip:~/
 ```
