@@ -1,0 +1,80 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+      - 'v*.*.*-alpha'
+      - 'v*.*.*-beta'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get version from tag
+        id: version
+        run: |
+          echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Extract changelog
+        id: changelog
+        run: |
+          # Extract the section for this version from CHANGELOG.md
+          VERSION="${{ steps.version.outputs.TAG }}"
+          
+          # Get content between version headers
+          CONTENT=$(awk "/## \[$VERSION\]/,/## \[/" CHANGELOG.md | sed '1d;$d')
+          
+          if [ -z "$CONTENT" ]; then
+            CONTENT="Release $VERSION"
+          fi
+          
+          # Save to file to handle multiline content
+          echo "$CONTENT" > release_notes.md
+
+      - name: Determine release type
+        id: release_type
+        run: |
+          TAG="${{ steps.version.outputs.TAG }}"
+          if [[ "$TAG" == *"alpha"* ]]; then
+            echo "PRERELEASE=true" >> $GITHUB_OUTPUT
+            echo "RELEASE_NAME=Alpha Release $TAG" >> $GITHUB_OUTPUT
+          elif [[ "$TAG" == *"beta"* ]]; then
+            echo "PRERELEASE=true" >> $GITHUB_OUTPUT
+            echo "RELEASE_NAME=Beta Release $TAG" >> $GITHUB_OUTPUT
+          else
+            echo "PRERELEASE=false" >> $GITHUB_OUTPUT
+            echo "RELEASE_NAME=Release $TAG" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ steps.release_type.outputs.RELEASE_NAME }}
+          body_path: release_notes.md
+          prerelease: ${{ steps.release_type.outputs.PRERELEASE }}
+          draft: false
+          files: |
+            setup.sh
+            deploy.sh
+            verify.sh
+            docker-compose.yml
+            nginx.conf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify release
+        run: |
+          echo "✅ Release ${{ steps.version.outputs.TAG }} created successfully!"
+          echo "🔗 https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.TAG }}"
