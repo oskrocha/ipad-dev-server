@@ -23,6 +23,8 @@
 > 🚀 Transform any VPS into a complete development environment in 10 minutes.  
 > Perfect for **iPad users** who need full VS Code, Docker, and modern dev tools anywhere.
 
+> ⚡ **Opinionated Setup** - This script makes specific choices (Zsh, Oh My Zsh, Powerlevel10k, LazyVim, LazyGit) optimized for modern terminal workflows. If you prefer different tools, you can customize the setup.sh script.
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Fedora 42](https://img.shields.io/badge/Fedora-42-blue.svg)](https://getfedora.org/)
 [![Debian](https://img.shields.io/badge/Debian-12%2F13-red.svg)](https://www.debian.org/)
@@ -120,12 +122,37 @@ One script installs everything you need:
 
 ## 🚀 Quick Start
 
+### Step 0: Get the Code (First Time Setup)
+
+**If you're new to Git, follow these steps on your local machine (Mac/Linux/WSL):**
+
+```bash
+# 1. Clone this repository to your computer
+git clone https://github.com/oskrocha/ipad-dev-server.git
+
+# 2. Navigate into the directory
+cd ipad-dev-server
+
+# 3. Make the scripts executable
+chmod +x deploy.sh setup.sh verify.sh
+
+# You're ready! Now choose Option 1 or 2 below.
+```
+
+**What if I don't have Git?**
+- Download the [ZIP file](https://github.com/oskrocha/ipad-dev-server/archive/refs/heads/main.zip)
+- Extract it on your computer
+- Open Terminal and `cd` to the extracted folder
+- Run `chmod +x *.sh` to make scripts executable
+
+---
+
 ### Option 1: Automated Deployment (Easiest) ⭐
 
 **One command does everything!**
 
 ```bash
-cd /path/to/ipad-dev-server
+# Run from the ipad-dev-server directory
 ./deploy.sh
 ```
 
@@ -512,6 +539,7 @@ nvim
 
 ## 📚 Additional Resources
 
+- 📖 **[Documentation Folder](docs/)** - Detailed guides, checklists, and troubleshooting
 - [Code-Server Documentation](https://coder.com/docs/code-server)
 - [LazyVim Documentation](https://www.lazyvim.org/)
 - [LazyGit Documentation](https://github.com/jesseduffield/lazygit)
