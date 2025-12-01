@@ -200,7 +200,7 @@ jobs:
           EOF
           
           # Test the configuration
-          docker run --rm -v "\$PWD/nginx-test.conf:/etc/nginx/nginx.conf:ro" nginx:alpine nginx -t
+          docker run --rm -v "$PWD/nginx-test.conf:/etc/nginx/nginx.conf:ro" nginx:alpine nginx -t
           
           # Clean up
           rm nginx-test.conf
