@@ -7,10 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1-beta] - 2024-12-01
+
 ### Added
 
-- Git flow structure with `main` and `develop` branches
-- Changelog for tracking version history
+- Comprehensive CI/CD pipeline with GitHub Actions
+- Integration tests for Debian 12 and Fedora 42
+- Code coverage tracking using bash tracing (61.7% coverage on Debian)
+- Automated syntax validation with ShellCheck
+- Nginx configuration testing
+- Security scanning with Trivy
+- Markdown linting configuration
+- Weekly scheduled CI runs
+
+### Changed
+
+- Updated README logo with cleaner ASCII art design
+- Improved documentation formatting and alignment
+- Enhanced shell script error handling with proper exit codes
+- Fixed ShellCheck warnings in setup.sh
+
+### Fixed
+
+- Quoted command substitutions in setup.sh (lines 313, 325, 415, 481)
+- Added error handling for cd commands
+- Resolved markdown linting violations
+- Fixed nginx configuration validation in CI
 
 ## [0.1.0-beta] - 2024-12-01
 
@@ -38,5 +60,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SELinux configuration for Fedora
 - Watchtower for automatic Docker updates
 
-[Unreleased]: https://github.com/oskrocha/ipad-dev-server/compare/v0.1.0-beta...HEAD
+[Unreleased]: https://github.com/oskrocha/ipad-dev-server/compare/v0.1.1-beta...HEAD
+[0.1.1-beta]: https://github.com/oskrocha/ipad-dev-server/compare/v0.1.0-beta...v0.1.1-beta
 [0.1.0-beta]: https://github.com/oskrocha/ipad-dev-server/releases/tag/v0.1.0-beta
