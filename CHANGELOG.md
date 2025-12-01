@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 4GB swap file configuration
 - Comprehensive documentation for iPad workflows
 - Verification script for troubleshooting
+- Initial project structure and core setup scripts
+- Docker Compose configuration for code-server
+- Nginx reverse proxy setup
 
 ### Security
 
@@ -35,17 +38,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SELinux configuration for Fedora
 - Watchtower for automatic Docker updates
 
-## [0.1.0-alpha] - 2024-12-01
-
-### Initial Release
-
-- Initial project structure
-- Core setup script for VPS configuration
-- Docker Compose configuration for code-server
-- Nginx reverse proxy setup
-- Basic documentation
-- Setup and deployment scripts
-
 [Unreleased]: https://github.com/oskrocha/ipad-dev-server/compare/v0.1.0-beta...HEAD
-[0.1.0-beta]: https://github.com/oskrocha/ipad-dev-server/compare/v0.1.0-alpha...v0.1.0-beta
-[0.1.0-alpha]: https://github.com/oskrocha/ipad-dev-server/releases/tag/v0.1.0-alpha
+[0.1.0-beta]: https://github.com/oskrocha/ipad-dev-server/releases/tag/v0.1.0-beta
